@@ -1,0 +1,15 @@
+# Root .gitignore
+.env
+.env.local
+.DS_Store
+*.log
+node_modules/
+dist/
+target/
+build/
+.idea/
+.vscode/
+*.swp
+*.swo
+.class
+.jar

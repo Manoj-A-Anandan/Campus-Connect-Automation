@@ -65,7 +65,7 @@ Campus Connect is a full-stack campus management system built on:
 #### Frontend Development
 - [x] **US-1.1.2**: Setup React Frontend Project
   - Create React app with Vite
-  - Setup folder structure (components, pages, services, utils, assets)
+  - Setup folder structure (components, pages, services, utilities, assets)
   - Install and configure Axios for API calls
   - Setup React Router for navigation
   - Configure environment variables for API endpoint
@@ -95,7 +95,7 @@ Campus Connect is a full-stack campus management system built on:
 - [x] **US-1.1.3**: Setup Test Automation Framework
   - Create Maven project for automation
   - Add dependencies: Selenium, Rest Assured, Cucumber, TestNG, Extent Reports
-  - Setup POM structure (pages, drivers, utils, config)
+  - Setup POM structure (pages, drivers, utilities, config)
   - Create ConfigReader utility
   - Create WebDriver Factory with thread safety
   - Setup Cucumber step definitions base class

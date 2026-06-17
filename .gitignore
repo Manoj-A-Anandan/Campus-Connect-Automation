@@ -13,3 +13,5 @@ build/
 *.swo
 .class
 .jar
+
+DEVELOPMENT_ROADMAP.md

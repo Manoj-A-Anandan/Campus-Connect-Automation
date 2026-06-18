@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegisterData {
+public class AuthData {
     private String token;
     private String refreshToken;
     private String email;

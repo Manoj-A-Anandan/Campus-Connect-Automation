@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org",
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "message": { "type": "string" },
+    "data": {
+      "type": "object",
+      "properties": {
+        "token": { "type": "string" },
+        "refreshToken": { "type": ["string", "null"] },
+        "email": { "type": "string", "format": "email" },
+        "fullName": { "type": "string" },
+        "role": { "type": "string" },
+        "userId": { "type": "integer" },
+        "message": { "type": "string" }
+      },
+      "required": ["token", "refreshToken", "email", "fullName", "role", "userId", "message"]
+    }
+  },
+  "required": ["success", "message", "data"]
+}

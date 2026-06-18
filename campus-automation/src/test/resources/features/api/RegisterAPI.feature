@@ -2,11 +2,11 @@
 Feature: Registration of the user profile
 
   Background:
-    Given the path is set to "/api/v1/auth/register"
+    Given the path is set to "/auth/register"
 
 
   Scenario: Successful registration with valid data
-    When the request payload is configured with following data:
+    When the request payload is sent with following data:
       | email | manoj55802@gmail.com |
       | fullName | Manoj A |
       | password | Dummy@3000 |
@@ -16,7 +16,7 @@ Feature: Registration of the user profile
 
 
   Scenario Outline: Unsuccessful registration with missing and invalid parameters
-    When user enters "<email>", "<fullName>", "<password>", "<confirmPassword>", "<role>"
+    When sent request with "<email>", "<fullName>", "<password>", "<confirmPassword>", "<role>"
     Then the status code should be 400 and success should be false
     And the response message should contains "<response>"
 

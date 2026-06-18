@@ -52,6 +52,17 @@ public class AuthController {
         );
     }
 
+    @GetMapping("/test/reset-token")
+    @Operation(summary = "Get reset token for testing", description = "Retrieve the latest active reset token for a user")
+    public ResponseEntity<ApiResponse> getResetTokenForTesting(@RequestParam String email) {
+        log.info("Test request to get reset token for email: {}", email);
+        String token = authService.getLatestResetTokenForEmail(email);
+        return new ResponseEntity<>(
+                ApiResponse.success("Token retrieved successfully", token),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/validate-token/{token}")
     @Operation(summary = "Validate reset token", description = "Check if password reset token is valid")
     public ResponseEntity<ApiResponse> validateToken(@PathVariable String token) {

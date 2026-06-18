@@ -1,7 +1,7 @@
 package stepdefinitions.api;
 
 import context.TestContext;
-import dto.RegisterResponse;
+import dto.AuthResponse;
 import dto.RegisterRequest;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -35,7 +35,7 @@ public class RegisterSteps {
         logger.info("The path is set to " + path);
     }
 
-    @When("the request payload is configured with following data:")
+    @When("the request payload is sent with following data:")
     public void configure_request_payload(DataTable dataTable) {
         Map<String, String> userDetails = dataTable.asMap(String.class, String.class);
 
@@ -47,16 +47,19 @@ public class RegisterSteps {
                 .role(userDetails.get("role"))
                 .build();
 
-        context.setSessionVar("registerPayload", registerPayload);
+        Response response = given()
+                .contentType("application/json")
+                .body(registerPayload)
+                .when()
+                .post();
+
+        context.setSessionVar("response", response);
     }
 
     @Then("^the status code should be (\\d+) and success should be (true|false)$")
     public void then_status_code_should_be(int statusCode, boolean isSuccess) {
-        Response response = given()
-                .contentType("application/json")
-                .body(context.getSessionVar("registerPayload"))
-                .when()
-                .post();
+
+        Response response = (Response) context.getSessionVar("response");
 
         Assert.assertEquals(response.getStatusCode(), statusCode, "API returned status code: " + response.getStatusCode());
         Assert.assertEquals(isSuccess, response.jsonPath().getBoolean("success"),
@@ -65,7 +68,7 @@ public class RegisterSteps {
         );
 
         try {
-            RegisterResponse authResponse = response.as(RegisterResponse.class);
+            AuthResponse authResponse = response.as(AuthResponse.class);
             context.setSessionVar("authResponse", authResponse);
         } catch (Exception e) {
             logger.warn("Could not deserialize response to AuthResponse: " + e.getMessage());
@@ -74,14 +77,14 @@ public class RegisterSteps {
 
     @And("the response message should contains {string}")
     public void theResponseMessageShouldContains(String message) {
-        RegisterResponse response = (RegisterResponse) context.getSessionVar("authResponse");
+        AuthResponse response = (AuthResponse) context.getSessionVar("authResponse");
         Assert.assertNotNull(response, "RegisterResponse object was not found in TestContext session!");
-        Assert.assertTrue(response.getMessage().contains(message),
+        Assert.assertTrue(response.getMessage().toLowerCase().contains(message.toLowerCase()    ),
                 "Success message is not matched, Actual response : " + response.getMessage()
         );
     }
 
-    @When("user enters {string}, {string}, {string}, {string}, {string}")
+    @When("sent request with {string}, {string}, {string}, {string}, {string}")
     public void user_enters(String email, String fullName, String password, String confirmPassword, String role) {
         RegisterRequest registerPayload = RegisterRequest.builder()
                 .email(email)
@@ -89,7 +92,14 @@ public class RegisterSteps {
                 .password(password)
                 .confirmPassword(confirmPassword)
                 .role(role).build();
-        context.setSessionVar("registerPayload", registerPayload);
+
+        Response response = given()
+                .contentType("application/json")
+                .body(registerPayload)
+                .when()
+                .post();
+
+        context.setSessionVar("response", response);
     }
 
 

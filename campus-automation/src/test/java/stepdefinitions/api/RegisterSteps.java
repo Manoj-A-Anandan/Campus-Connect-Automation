@@ -67,22 +67,27 @@ public class RegisterSteps {
                         + " but actual response is " + response.jsonPath().getBoolean("success")
         );
 
-        try {
-            AuthResponse authResponse = response.as(AuthResponse.class);
-            context.setSessionVar("authResponse", authResponse);
-        } catch (Exception e) {
-            logger.warn("Could not deserialize response to AuthResponse: " + e.getMessage());
-        }
+//        try {
+//            AuthResponse authResponse = response.as(AuthResponse.class);
+//            context.setSessionVar("authResponse", authResponse);
+//        } catch (Exception e) {
+//            logger.warn("Could not deserialize response to AuthResponse: " + e.getMessage());
+//        }
     }
 
     @And("the response message should contains {string}")
     public void theResponseMessageShouldContains(String message) {
-        AuthResponse response = (AuthResponse) context.getSessionVar("authResponse");
-        Assert.assertNotNull(response, "RegisterResponse object was not found in TestContext session!");
-        Assert.assertTrue(response.getMessage().toLowerCase().contains(message.toLowerCase()    ),
-                "Success message is not matched, Actual response : " + response.getMessage()
+        Response response = (Response) context.getSessionVar("response");
+        Assert.assertNotNull(response, "Response object was not found in TestContext session!");
+
+        String responseMessage = response.jsonPath().getString("message");
+        Assert.assertNotNull(responseMessage, "Response message field is null!");
+
+        Assert.assertTrue(responseMessage.toLowerCase().contains(message.toLowerCase()),
+                "Message did not match. Expected to contain: '" + message + "', but got: '" + responseMessage + "'"
         );
     }
+
 
     @When("sent request with {string}, {string}, {string}, {string}, {string}")
     public void user_enters(String email, String fullName, String password, String confirmPassword, String role) {

@@ -35,6 +35,11 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         log.info("Registering new user with email: {}", request.getEmail());
 
+        // Validate full name
+        if (request.getFullName() == null || request.getFullName().trim().isEmpty()) {
+            throw new ValidationException("name should not be empty");
+        }
+
         // Validate email format
         if (!isValidEmail(request.getEmail())) {
             throw new ValidationException("Invalid email format");
@@ -170,6 +175,18 @@ public class AuthService {
         return AuthResponse.builder()
                 .message("Password reset successfully")
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public String getLatestResetTokenForEmail(String email) {
+        log.info("Fetching reset token for email: {}", email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+
+        PasswordReset passwordReset = passwordResetRepository.findFirstByUserAndUsedIsFalseOrderByCreatedAtDesc(user)
+                .orElseThrow(() -> new ResourceNotFoundException("No active reset token found for user: " + email));
+
+        return passwordReset.getToken();
     }
 
     private boolean isValidEmail(String email) {

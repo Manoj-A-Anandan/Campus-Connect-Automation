@@ -1,4 +1,5 @@
 
+@API
 Feature: Login Functionality for the existing user
 
   Background:

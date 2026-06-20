@@ -1,5 +1,6 @@
 package driver;
 
+import config.ConfigManager;
 import org.openqa.selenium.WebDriver;
 
 public class DriverManager {

@@ -7,7 +7,7 @@
 
     <test name="Cucumber Automation Tests">
         <classes>
-            <class name="runner.ApiRunner"/>
+            <class name="runner.UiRunner"/>
         </classes>
     </test>
 

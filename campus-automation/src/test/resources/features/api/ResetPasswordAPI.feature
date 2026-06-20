@@ -1,4 +1,4 @@
-@api @auth @reset-password
+@API @api @auth @reset-password
 Feature: Reset password
 
   Background:

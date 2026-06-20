@@ -1,4 +1,5 @@
 
+@API
 Feature: Registration of the user profile
 
   Background:

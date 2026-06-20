@@ -1,7 +1,6 @@
 package stepdefinitions.api;
 
 import context.TestContext;
-import dto.AuthResponse;
 import dto.RegisterRequest;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;

@@ -5,6 +5,7 @@ import context.TestContext;
 import driver.DriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.Scenario;
 import io.restassured.RestAssured;
 import org.openqa.selenium.OutputType;
@@ -47,4 +48,19 @@ public class Hooks {
         }
         DriverManager.quitDriver();
     }
+
+    @BeforeAll
+    public static void resetDatabaseBeforeSuite() {
+        try {
+            // Automatically truncate the users and password_resets tables before the tests
+            // start
+            String cmd = "docker exec -i campus_connect_db psql -U postgres -d campus_connect -c \"TRUNCATE TABLE users, password_resets RESTART IDENTITY CASCADE;\"";
+            Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", cmd }).waitFor();
+            System.out.println(">>> Database auto-reset completed successfully! <<<");
+        } catch (Exception e) {
+            System.err.println(">>> Database auto-reset skipped (either container not running or local): "
+                    + e.getMessage() + " <<<");
+        }
+    }
+
 }

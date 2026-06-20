@@ -5,6 +5,7 @@ pipeline {
         stage('Clean Environment') {
             steps {
                 echo 'Cleaning up existing containers...'
+                bat 'docker rm -f campus_connect_db campus_connect_backend campus_connect_frontend || exit 0'
                 bat 'docker compose down --volumes --remove-orphans || exit 0'
             }
         }

@@ -30,6 +30,7 @@ public class LoginSteps {
 
     @Given("there should be a user exists with email {string} and pass {string}")
     public void there_should_be_a_user_exists_with_email_and_pass(String email, String password) {
+        logger.info("Ensuring user exists in DB via registration API. Email: {}", email);
         RegisterRequest registerPayload = RegisterRequest.builder()
                 .email(email)
                 .fullName(email.substring(0, email.length() - 10))
@@ -37,15 +38,17 @@ public class LoginSteps {
                 .confirmPassword(password)
                 .role("admin")
                 .build();
-        given()
+        Response response = given()
                 .contentType(ContentType.JSON)
                 .body(registerPayload)
                 .when()
                 .post("http://localhost:8080/api/v1/auth/register");
+        logger.info("Ensure user API response code: {}", response.getStatusCode());
     }
 
     @When("sent request with {string}, {string}")
     public void user_enters(String email, String password) {
+        logger.info("Sending API login request for email: {}", email);
         LoginRequest requestPayload = LoginRequest.builder()
                 .email(email)
                 .password(password)
@@ -57,6 +60,7 @@ public class LoginSteps {
                 .when()
                 .post();
 
+        logger.info("API login response status code: {}", response.getStatusCode());
         context.setSessionVar("response", response);
     }
 

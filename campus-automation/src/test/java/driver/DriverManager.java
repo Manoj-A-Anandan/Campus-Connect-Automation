@@ -20,6 +20,10 @@ public class DriverManager {
         return driverThreadLocal.get();
     }
 
+    public static boolean hasDriver() {
+        return driverThreadLocal.get() != null;
+    }
+
     public static void quitDriver() {
         WebDriver driver = driverThreadLocal.get();
         if (driver != null) {
@@ -31,5 +35,19 @@ public class DriverManager {
                 driverThreadLocal.remove();
             }
         }
+    }
+
+    private static final ThreadLocal<byte[]> screenshotThreadLocal = new ThreadLocal<>();
+
+    public static void setScreenshot(byte[] screenshot) {
+        screenshotThreadLocal.set(screenshot);
+    }
+
+    public static byte[] getScreenshot() {
+        return screenshotThreadLocal.get();
+    }
+
+    public static void clearScreenshot() {
+        screenshotThreadLocal.remove();
     }
 }

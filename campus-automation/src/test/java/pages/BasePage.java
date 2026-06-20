@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -55,5 +56,12 @@ public class BasePage {
         return driver.getCurrentUrl();
     }
 
+    public String getLocalStorageItem(String key) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (String) js.executeScript("return window.localStorage.getItem(arguments[0]);", key);
+    }
 
+    public void navigateTo(String url) {
+        driver.get(url);
+    }
 }

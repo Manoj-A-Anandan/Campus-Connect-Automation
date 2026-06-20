@@ -24,4 +24,13 @@ public class AllureUtils {
                 ".json"
         );
     }
+
+    public static void attachScreenshot(byte[] screenshot) {
+        Allure.addAttachment(
+                "Failure Screenshot",
+                "image/png",
+                new java.io.ByteArrayInputStream(screenshot),
+                ".png"
+        );
+    }
 }

@@ -5,7 +5,10 @@ import context.TestContext;
 import driver.DriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.restassured.RestAssured;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 public class Hooks {
@@ -29,7 +32,19 @@ public class Hooks {
     }
 
     @After("@UI")
-    public void tearDownUI() {
+    public void tearDownUI(Scenario scenario) {
+        if (scenario.isFailed()) {
+            if (DriverManager.hasDriver()) {
+                try {
+                    WebDriver driver = DriverManager.getDriver();
+                    byte[] screenshotBytes = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                    DriverManager.setScreenshot(screenshotBytes);
+                    scenario.attach(screenshotBytes, "image/png", "Failure Screenshot");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         DriverManager.quitDriver();
     }
 }

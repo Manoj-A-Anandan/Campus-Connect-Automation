@@ -1,6 +1,7 @@
 package pages;
 
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,5 +46,12 @@ public class DashBoardPage extends BasePage {
     }
     public String getUserId() {
         return userId.getText();
+    }
+
+    @FindBy(className = "logout-btn")
+    WebElement logoutBtn;
+
+    public void clickLogout() {
+        waitForElementToBeClickable(By.className("logout-btn")).click();
     }
 }

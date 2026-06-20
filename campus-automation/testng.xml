@@ -1,13 +1,15 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="AutomationSuite" parallel="none">
+<suite name="AutomationSuite">
 
     <listeners>
         <listener class-name="utilities.ExtentListener"/>
+        <listener class-name="utilities.AnnotationTransformer"/>
     </listeners>
 
     <test name="Cucumber Automation Tests">
         <classes>
             <class name="runner.UiRunner"/>
+            <class name="runner.ApiRunner"/>
         </classes>
     </test>
 

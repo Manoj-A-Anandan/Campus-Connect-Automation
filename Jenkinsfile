@@ -12,6 +12,7 @@ pipeline {
 
     environment {
         RESOLVED_TEST_TYPE = 'smoke'
+        DOCKER_HOST = 'tcp://localhost:2375'
     }
 
     tools {

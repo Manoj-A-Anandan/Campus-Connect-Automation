@@ -119,7 +119,7 @@ pipeline {
                 // Archive Extent reports and screenshots
                 archiveArtifacts artifacts: 'reports/extent-report/**/*', allowEmptyArchive: true
                 // Archive Log4j2 logs
-                archiveArtifacts artifacts: 'target/logs/**/*', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'logs/**/*', allowEmptyArchive: true
             }
 
             // Publish TestNG results inside Jenkins UI

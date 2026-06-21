@@ -1,5 +1,5 @@
 
-@API
+@API @regression
 Feature: Login Functionality for the existing user
 
   Background:
@@ -7,6 +7,7 @@ Feature: Login Functionality for the existing user
     And there should be a user exists with email "login@gmail.com" and pass "Dummy@3000"
 
 
+  @smoke
   Scenario: Successful login with valid credentials
     When sent request with "login@gmail.com", "Dummy@3000"
     Then the status code should be 200 and success should be true

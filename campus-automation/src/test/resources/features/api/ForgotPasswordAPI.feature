@@ -1,4 +1,4 @@
-@API
+@API @regression
 Feature: Forgot Password endpoint to get the reset link
   
   Background: 

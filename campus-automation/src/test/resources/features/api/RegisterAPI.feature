@@ -1,11 +1,12 @@
 
-@API
+@API @regression
 Feature: Registration of the user profile
 
   Background:
     Given the path is set to "/auth/register"
 
 
+  @smoke
   Scenario: Successful registration with valid data
     When the request payload is sent with following data:
       | email | manoj55802@gmail.com |

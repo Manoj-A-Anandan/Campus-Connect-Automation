@@ -1,4 +1,4 @@
-@UI
+@UI @regression
 Feature: User Registration
 
   Background:
@@ -6,6 +6,7 @@ Feature: User Registration
     And user navigates to the Registration page
 
 
+  @smoke
   Scenario: Successful registration with valid details
     When user registers with:
       | email           | manoj55802Login@gmail.com |

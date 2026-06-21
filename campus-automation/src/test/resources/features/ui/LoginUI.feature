@@ -1,10 +1,11 @@
-@UI
+@UI @regression
 Feature: User Login
 
   Background:
     Given user is on the Login page
     And there should be a user exists with email "loginUI@gmail.com" and pass "Dummy@3000"
 
+  @smoke
   Scenario: Successful login with valid credentials
     When user logs in with:
       | email    | loginUI@gmail.com |

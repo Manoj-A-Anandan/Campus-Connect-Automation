@@ -1,12 +1,48 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'TEST_TYPE', choices: ['smoke', 'regression'], description: 'Select test suite to run')
+        string(name: 'EMAIL_RECIPIENT', defaultValue: 'manoj55802@gmail.com', description: 'Recipient email address for the test report')
+    }
+
+    triggers {
+        cron('*/30 * * * *')
+    }
+
+    environment {
+        RESOLVED_TEST_TYPE = 'smoke'
+    }
+
     tools {
         maven 'Maven3'
         jdk 'JDK17'
     }
 
     stages {
+        stage('Determine Test Type') {
+            steps {
+                script {
+                    def isTimer = currentBuild.getBuildCauses().toString().contains('TimerTrigger')
+                    if (isTimer) {
+                        def calendar = Calendar.getInstance()
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY)
+                        int minute = calendar.get(Calendar.MINUTE)
+                        if (hour % 3 == 0 && minute < 30) {
+                            env.RESOLVED_TEST_TYPE = 'regression'
+                            echo "Timer triggered: Running REGRESSION tests."
+                        } else {
+                            env.RESOLVED_TEST_TYPE = 'smoke'
+                            echo "Timer triggered: Running SMOKE tests."
+                        }
+                    } else {
+                        env.RESOLVED_TEST_TYPE = params.TEST_TYPE ?: 'smoke'
+                        echo "Manual/Non-timer trigger: Running ${env.RESOLVED_TEST_TYPE} tests."
+                    }
+                }
+            }
+        }
+
         stage('Clean Environment') {
             steps {
                 echo 'Cleaning up existing containers...'
@@ -66,9 +102,9 @@ pipeline {
 
         stage('Run Automation Tests') {
             steps {
-                echo 'Running automation test suite...'
+                echo "Running ${env.RESOLVED_TEST_TYPE} automation test suite..."
                 dir('campus-automation') {
-                    bat 'mvn clean test "-Dsurefire.suiteXmlFiles=testng.xml"'
+                    bat "mvn clean test -Dsurefire.suiteXmlFiles=testng.xml -Dcucumber.filter.tags=@${env.RESOLVED_TEST_TYPE}"
                 }
             }
         }
@@ -89,6 +125,26 @@ pipeline {
 
             echo 'Tearing down Docker environment...'
             bat 'docker compose down --volumes || exit 0'
+
+            echo 'Sending email report...'
+            script {
+                def recipient = params.EMAIL_RECIPIENT ?: 'manoj55802@gmail.com'
+                emailext (
+                    subject: "Campus Connect Build #${env.BUILD_NUMBER} - ${env.RESOLVED_TEST_TYPE.toUpperCase()} - ${currentBuild.currentResult}",
+                    body: """
+                        <h3>Campus Connect Build #${env.BUILD_NUMBER}</h3>
+                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                        <p><b>Test Suite Run:</b> ${env.RESOLVED_TEST_TYPE}</p>
+                        <p><b>Pipeline Job:</b> ${env.JOB_NAME}</p>
+                        <p><b>Jenkins Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                        <br/>
+                        <p><i>The Extent HTML test execution report has been attached to this email.</i></p>
+                    """,
+                    to: recipient,
+                    attachmentsPattern: 'campus-automation/reports/extent-report/ExtentReport.html',
+                    mimeType: 'text/html'
+                )
+            }
         }
 
         success {

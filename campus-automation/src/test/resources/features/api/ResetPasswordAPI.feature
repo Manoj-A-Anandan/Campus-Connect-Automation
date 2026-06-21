@@ -1,4 +1,4 @@
-@API @api @auth @reset-password
+@API @api @auth @reset-password @regression
 Feature: Reset password
 
   Background:

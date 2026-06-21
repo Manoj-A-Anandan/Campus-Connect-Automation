@@ -128,22 +128,26 @@ pipeline {
 
             echo 'Sending email report...'
             script {
-                def recipient = params.EMAIL_RECIPIENT ?: 'manoj55802@gmail.com'
-                emailext (
-                    subject: "Campus Connect Build #${env.BUILD_NUMBER} - ${env.RESOLVED_TEST_TYPE.toUpperCase()} - ${currentBuild.currentResult}",
-                    body: """
-                        <h3>Campus Connect Build #${env.BUILD_NUMBER}</h3>
-                        <p><b>Status:</b> ${currentBuild.currentResult}</p>
-                        <p><b>Test Suite Run:</b> ${env.RESOLVED_TEST_TYPE}</p>
-                        <p><b>Pipeline Job:</b> ${env.JOB_NAME}</p>
-                        <p><b>Jenkins Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
-                        <br/>
-                        <p><i>The Extent HTML test execution report has been attached to this email.</i></p>
-                    """,
-                    to: recipient,
-                    attachmentsPattern: 'campus-automation/reports/extent-report/ExtentReport.html',
-                    mimeType: 'text/html'
-                )
+                try {
+                    def recipient = params.EMAIL_RECIPIENT ?: 'manoj55802@gmail.com'
+                    emailext (
+                        subject: "Campus Connect Build #${env.BUILD_NUMBER} - ${env.RESOLVED_TEST_TYPE.toUpperCase()} - ${currentBuild.currentResult}",
+                        body: """
+                            <h3>Campus Connect Build #${env.BUILD_NUMBER}</h3>
+                            <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                            <p><b>Test Suite Run:</b> ${env.RESOLVED_TEST_TYPE}</p>
+                            <p><b>Pipeline Job:</b> ${env.JOB_NAME}</p>
+                            <p><b>Jenkins Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                            <br/>
+                            <p><i>The Extent HTML test execution report has been attached to this email.</i></p>
+                        """,
+                        to: recipient,
+                        attachmentsPattern: 'campus-automation/reports/extent-report/ExtentReport.html',
+                        mimeType: 'text/html'
+                    )
+                } catch (Exception e) {
+                    echo "WARNING: Failed to send email report via SMTP: ${e.getMessage()}"
+                }
             }
         }
 

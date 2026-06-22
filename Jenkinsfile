@@ -6,10 +6,12 @@ pipeline {
         string(name: 'EMAIL_RECIPIENT', defaultValue: 'manoj55802@gmail.com', description: 'Recipient email address for the test report')
     }
 
+    /*
     triggers {
         cron('*/30 * * * *')
         pollSCM('*/5 * * * *')
     }
+    */
 
     environment {
         DOCKER_HOST = 'tcp://localhost:2375'

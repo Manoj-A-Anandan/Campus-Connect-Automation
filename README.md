@@ -1,373 +1,140 @@
-# Campus Connect - Campus Management System
+# Campus Connect - Test Automation Framework & CI/CD Pipeline
 
-A full-stack campus management system built with **Spring Boot 3.2** and **React + Vite**.
+This repository contains the **automated test suite** and CI/CD pipeline for **Campus Connect**, an enterprise campus management system. 
 
-## 🎯 Sprint 1: Authentication Module - Complete MVP
-
-This is the **fully functional Sprint 1 delivery** with:
-- ✅ JWT-based authentication API
-- ✅ User registration with password validation
-- ✅ User login with token generation
-- ✅ Forgot password and reset functionality
-- ✅ React frontend with login, register, password reset pages
-- ✅ Protected routes and dashboard
-- ✅ Fully styled responsive UI
-- ✅ Docker Compose setup for local development
+The focus of this test suite is the **Sprint 1 Delivery: Authentication Module MVP**. The automation framework validates API integrations, web UI flows, security boundaries, and session management.
 
 ---
 
-## 📋 Project Structure
+## 🛠️ Test Automation Stack
 
-```
-campus-connect/
-├── backend/                    # Spring Boot 3.2 Backend
-│   ├── src/main/java/
-│   │   └── com/campusconnect/
-│   │       ├── config/         # Security & Spring Config
-│   │       ├── controller/     # REST Controllers
-│   │       ├── service/        # Business Logic
-│   │       ├── repository/     # JPA Repositories
-│   │       ├── entity/         # JPA Entities
-│   │       ├── dto/            # Request/Response DTOs
-│   │       ├── security/       # JWT & Security
-│   │       └── exception/      # Exception Handling
-│   ├── src/main/resources/
-│   │   └── application.properties
-│   ├── pom.xml
-│   └── Dockerfile
-├── frontend/                   # React + Vite Frontend
-│   ├── src/
-│   │   ├── pages/              # LoginPage, RegisterPage, etc.
-│   │   ├── components/         # ProtectedRoute
-│   │   ├── services/           # API Services
-│   │   ├── styles/             # CSS Styles
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── index.html
-│   └── Dockerfile
-├── docker-compose.yml         # PostgreSQL + Backend + Frontend
-├── .gitignore
-└── README.md
-```
-
----
-
-## 🚀 Quick Start
-
-### Option 1: Docker Compose (Recommended)
-
-```bash
-# Start all services (PostgreSQL, Backend, Frontend)
-docker-compose up -d
-
-# Access the application:
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:8080/api
-# Swagger UI: http://localhost:8080/api/swagger-ui.html
-```
-
-### Option 2: Local Development
-
-#### Prerequisites
-- Java 17+
-- Maven 3.8+
-- Node.js 18+
-- PostgreSQL 14+
-
-#### Backend Setup
-
-```bash
-cd backend
-
-# Install dependencies
-mvn clean install
-
-# Start the application
-mvn spring-boot:run
-
-# Application will start on http://localhost:8080
-# API Base URL: http://localhost:8080/api/v1
-```
-
-#### Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Frontend will start on http://localhost:3000
-```
-
----
-
-## 🔐 API Endpoints
-
-### Authentication
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/v1/auth/register` | Register new user |
-| POST | `/v1/auth/login` | Login user |
-| POST | `/v1/auth/forgot-password` | Request password reset |
-| POST | `/v1/auth/validate-token/{token}` | Validate reset token |
-| POST | `/v1/auth/reset-password` | Reset password |
-| GET | `/v1/auth/health` | API health check |
-
-### Request/Response Examples
-
-#### Register
-```json
-POST /v1/auth/register
-{
-  "email": "student@campus.edu",
-  "fullName": "John Doe",
-  "password": "SecurePass123!",
-  "confirmPassword": "SecurePass123!",
-  "role": "STUDENT"
-}
-
-Response 201:
-{
-  "success": true,
-  "message": "User registered successfully",
-  "data": {
-    "token": "eyJhbGciOiJIUzUxMiJ9...",
-    "email": "student@campus.edu",
-    "fullName": "John Doe",
-    "role": "STUDENT",
-    "userId": 1
-  }
-}
-```
-
-#### Login
-```json
-POST /v1/auth/login
-{
-  "email": "student@campus.edu",
-  "password": "SecurePass123!"
-}
-
-Response 200:
-{
-  "success": true,
-  "message": "Login successful",
-  "data": {
-    "token": "eyJhbGciOiJIUzUxMiJ9...",
-    "email": "student@campus.edu",
-    "fullName": "John Doe",
-    "role": "STUDENT",
-    "userId": 1
-  }
-}
-```
-
----
-
-## 🛡️ Features
-
-### Authentication
-- ✅ User registration with email validation
-- ✅ Password strength validation (8+ chars, uppercase, lowercase, digit, special char)
-- ✅ Email uniqueness check
-- ✅ Secure password hashing (BCrypt)
-- ✅ JWT token generation (24-hour expiry)
-- ✅ Forgot password with email link (30-min expiry)
-- ✅ Password reset functionality
-
-### Frontend
-- ✅ Login page with form validation
-- ✅ Registration page with password strength feedback
-- ✅ Forgot password page
-- ✅ Password reset page with token validation
-- ✅ Protected dashboard (requires authentication)
-- ✅ JWT token persistence in localStorage
-- ✅ Automatic redirect to login on token expiry
-- ✅ Responsive design for mobile/tablet
-- ✅ Error and success messaging
-
-### Backend
-- ✅ Spring Security with JWT filter
-- ✅ CORS configuration for frontend domain
-- ✅ Global exception handling
-- ✅ Request/Response validation
-- ✅ Database integration with PostgreSQL
-- ✅ JPA Hibernate ORM
-- ✅ Swagger/OpenAPI documentation
-- ✅ Request logging
-
----
-
-## 📦 Technology Stack
-
-### Backend
-- **Framework**: Spring Boot 3.2
+The framework is a **BDD-driven hybrid automation framework** built with Java and Maven:
 - **Language**: Java 17
-- **Database**: PostgreSQL 14+
-- **Security**: Spring Security + JWT
-- **ORM**: JPA Hibernate
-- **API Docs**: Springdoc OpenAPI (Swagger)
-- **Build**: Maven
-
-### Frontend
-- **Framework**: React 18.2
-- **Build Tool**: Vite
-- **Routing**: React Router v6
-- **HTTP Client**: Axios
-- **Styling**: CSS3
-
-### DevOps
-- **Containerization**: Docker
-- **Orchestration**: Docker Compose
+- **Test Runner**: TestNG (v7.10.2)
+- **BDD Framework**: Cucumber (v7.18.0)
+- **API Testing**: REST Assured (v5.5.6)
+- **UI Testing**: Selenium WebDriver (v4.44.0) with WebDriverManager (v5.9.1)
+- **Reporting**: Extent Reports (v5.1.2), Allure Reports (v2.29.0)
+- **Logging**: Log4j2 (v2.23.1)
+- **CI/CD**: Jenkins Pipeline (`Jenkinsfile`)
 
 ---
 
-## 🔧 Configuration
+## 📋 Directory Structure
 
-### Backend Configuration (application.properties)
+The automation source is located in the `campus-automation` subdirectory:
 
-```properties
-# Server
-server.port=8080
-
-# Database
-spring.datasource.url=jdbc:postgresql://localhost:5432/campus_connect
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-
-# JWT
-jwt.secret=your-secret-key
-jwt.expiration=86400000  # 24 hours
-
-# Mail (for password reset emails)
-spring.mail.host=smtp.gmail.com
-spring.mail.port=587
-```
-
-### Frontend Configuration
-
-Edit `vite.config.js` to change API endpoint:
-```javascript
-proxy: {
-  '/api': {
-    target: 'http://localhost:8080/api',
-    changeOrigin: true,
-    rewrite: (path) => path.replace(/^\/api/, '')
-  }
-}
+```text
+campus-automation/
+├── src/test/java/
+│   ├── config/            # Thread-safe config properties loader
+│   ├── context/           # TestContext for cross-step data sharing
+│   ├── driver/            # Thread-safe Web Driver manager (ThreadLocal)
+│   ├── dto/               # REST Request/Response Data Transfer Objects
+│   ├── hooks/             # Cucumber hooks (browser lifecycle, screenshots)
+│   ├── pages/             # Page Object Model (POM) classes
+│   ├── reports/           # Allure / Extent report setup and listeners
+│   ├── runner/            # TestNG Cucumber Runner classes
+│   ├── stepdefinitions/   # Cucumber step definitions
+│   │   ├── api/           # REST Assured step definitions
+│   │   └── ui/            # Selenium step definitions
+│   └── utilities/         # Custom loggers, DB query utilities, listeners
+├── src/test/resources/
+│   ├── features/          # Cucumber Gherkin feature files
+│   │   ├── api/           # API Scenarios (ForgotPassword, Login, Register, ResetPassword)
+│   │   └── ui/            # UI Scenarios (Login, Register)
+│   ├── schemas/           # JSON schema files for contract validation
+│   ├── config.properties  # Test run properties (browser, URLs, headless flag)
+│   └── log4j2.xml         # Logging configuration
+├── pom.xml                # Maven project structure & dependencies
+└── testng.xml             # Test suite runner suites xml
 ```
 
 ---
 
-## 🧪 Testing the APIs
+## 🚀 Quick Start & Local Execution
 
-### Using Postman
-
-1. **Register** → POST `http://localhost:8080/api/v1/auth/register`
-2. **Login** → POST `http://localhost:8080/api/v1/auth/login`
-3. **Copy the token** from response
-4. **Add Authorization header**: `Bearer {token}`
-5. Access protected endpoints
-
-### Using cURL
+### 1. Run the Application Under Test (AUT)
+The application services must be running before executing the automation tests. Use Docker Compose to spin them up:
 
 ```bash
-# Register
-curl -X POST http://localhost:8080/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@campus.edu",
-    "fullName": "Test User",
-    "password": "SecurePass123!",
-    "confirmPassword": "SecurePass123!",
-    "role": "STUDENT"
-  }'
+# Start all services (PostgreSQL, Backend API, React Frontend)
+docker-compose up -d --build
+```
+Verify the application is up:
+- Frontend UI: `http://localhost:3000`
+- Backend API: `http://localhost:8080/api/v1`
+- Swagger UI: `http://localhost:8080/api/swagger-ui.html`
 
-# Login
-curl -X POST http://localhost:8080/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@campus.edu",
-    "password": "SecurePass123!"
-  }'
+### 2. Configure Execution Settings
+Edit `campus-automation/src/test/resources/config.properties` if needed:
+```properties
+browser = chrome
+base.url = http://localhost:3000
+headless = true
+api.base.url = http://localhost:8080/api/v1
 ```
 
----
-
-## 📝 Password Requirements
-
-- **Minimum 8 characters**
-- **At least one uppercase letter** (A-Z)
-- **At least one lowercase letter** (a-z)
-- **At least one digit** (0-9)
-- **At least one special character** (!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?)
-
----
-
-## 🚀 Deployment
-
-### Docker Deployment
+### 3. Run Automation Suites via Maven
+Run the commands from the `campus-automation` directory:
 
 ```bash
-# Build images
-docker-compose build
+cd campus-automation
 
-# Run containers
-docker-compose up -d
+# Run the complete test suite (UI + API)
+mvn clean test
 
-# View logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
+# Run API Tests only
+mvn clean test -Dcucumber.filter.tags="@api"
 
-# Stop containers
-docker-compose down
-```
+# Run UI Tests only
+mvn clean test -Dcucumber.filter.tags="@ui"
 
-### Database Migrations
+# Run Smoke Tests
+mvn clean test -Dcucumber.filter.tags="@smoke"
 
-Hibernate auto-creates tables based on JPA entities. Configure in `application.properties`:
-```properties
-spring.jpa.hibernate.ddl-auto=update
+# Run Regression Tests
+mvn clean test -Dcucumber.filter.tags="@regression"
 ```
 
 ---
 
-## 🔄 Next Steps (Sprint 2)
+## 📊 Test Reports & Execution Logs
 
-- Student Management APIs (CRUD)
-- Attendance Management APIs
-- Course Management APIs
-- Student and Attendance UI pages
-- Dashboard layout
+Once tests are executed, reports and logs are generated automatically:
 
----
+### 1. Extent HTML Report
+- **Path**: `campus-automation/reports/extent-report/ExtentReport.html`
+- A single, self-contained interactive dashboard showing step execution, duration, and failure screenshots.
 
-## 📄 License
+### 2. Failure Screenshots
+- **Path**: `campus-automation/reports/extent-report/screenshots/`
+- For UI tests, a screenshot is automatically captured upon test step failure and embedded directly inside the Extent report.
 
-This project is part of Campus Connect - Full Stack Portfolio Project (June 2026)
+### 3. Allure Reports
+- Allure results are written to `campus-automation/target/allure-results`.
+- To generate and view the report in your web browser:
+  ```bash
+  allure serve target/allure-results
+  ```
 
----
-
-## 👨‍💻 Contributing
-
-For Sprint 1 testing automation, create Jira tickets for:
-1. **TESTING-1**: Automate Authentication APIs
-2. **TESTING-2**: Automate Login/Registration UI
-
----
-
-## 📧 Support
-
-For issues or questions, please refer to the project documentation or contact the development team.
+### 4. Log4j2 Logs
+- Running tests writes real-time steps to the console and to files under `campus-automation/logs/`.
+- Use this log file to debug request payloads, response validations, and browser element interactions.
 
 ---
 
-**Sprint 1 Status**: ✅ Complete - Ready for testing automation
-**Last Updated**: June 16, 2026
+## 🔗 Jenkins CI/CD Pipeline
+
+The repository includes a Jenkins pipeline defined in the [Jenkinsfile](./Jenkinsfile) at the root directory:
+- **Clean up**: Deletes existing containers.
+- **Build**: Compiles, starts the AUT services via Docker.
+- **Health Checks**: Polls API and UI endpoints until responsive.
+- **Run Suite**: Triggers TestNG execution in headless Chrome mode.
+- **Post-Build Actions**: 
+  - Archives Extent Reports and failure screenshots as build artifacts.
+  - Publishes TestNG results inside the Jenkins UI.
+  - Sends email reports to the configured recipient.
+  - Tears down the Docker stack.
+
+*Note: The automatic schedule and polling triggers are currently commented out inside the `Jenkinsfile` triggers block to allow manual runs during project updates.*
